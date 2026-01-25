@@ -20,7 +20,7 @@
 
     <!-- Set recommended package metadata -->
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageId>FakeDataMcpServer</PackageId>
+    <PackageId>FakeDataMcpServer-beta</PackageId>
     <PackageVersion>0.1.0-beta</PackageVersion>
     <PackageTags>AI; MCP; server; stdio</PackageTags>
     <Description>An MCP server for generating fake data (companies, contacts, products, messages) using the MCP C# SDK.</Description>
