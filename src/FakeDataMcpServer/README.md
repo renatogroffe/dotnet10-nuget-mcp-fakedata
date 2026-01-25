@@ -1,37 +1,77 @@
-# MCP Server
+# MCP Server de Geração de Dados Fake
 
-This README was created using the C# MCP server project template.
-It demonstrates how you can easily create an MCP server using C# and publish it as a NuGet package.
+Servidor MCP (Model Context Protocol) implementado em C# .NET 10 para gerar dados fictícios (fake data) de forma automatizada. Este servidor é ideal para testes, prototipagem e demonstrações de aplicações que necessitam de dados realistas.
 
-The MCP server is built as a self-contained application and does not require the .NET runtime to be installed on the target machine.
-However, since it is self-contained, it must be built for each target platform separately.
-By default, the template is configured to build for:
-* `win-x64`
-* `win-arm64`
-* `osx-arm64`
-* `linux-x64`
-* `linux-arm64`
-* `linux-musl-x64`
+## 📋 Visão Geral
 
-If your users require more platforms to be supported, update the list of runtime identifiers in the project's `<RuntimeIdentifiers />` element.
+O **FakeDataMcpServer** é um servidor MCP construído como uma aplicação autossuficiente que fornece ferramentas para gerar dados fake em português brasileiro, utilizando a biblioteca [Bogus](https://github.com/bchavez/Bogus).
 
-See [aka.ms/nuget/mcp/guide](https://aka.ms/nuget/mcp/guide) for the full guide.
+### Plataformas Suportadas
 
-Please note that this template is currently in an early preview stage. If you have feedback, please take a [brief survey](http://aka.ms/dotnet-mcp-template-survey).
+O servidor é compilado como self-contained para múltiplas plataformas:
+* `win-x64` (Windows 64-bit)
+* `win-arm64` (Windows ARM64)
+* `osx-arm64` (macOS ARM64)
+* `linux-x64` (Linux 64-bit)
+* `linux-arm64` (Linux ARM64)
+* `linux-musl-x64` (Linux musl)
 
-## Checklist before publishing to NuGet.org
+## 🔧 Ferramentas Disponíveis
 
-- Test the MCP server locally using the steps below.
-- Update the package metadata in the .csproj file, in particular the `<PackageId>`.
-- Update `.mcp/server.json` to declare your MCP server's inputs.
-  - See [configuring inputs](https://aka.ms/nuget/mcp/guide/configuring-inputs) for more details.
-- Pack the project using `dotnet pack`.
+O servidor implementa as seguintes ferramentas MCP para geração de dados fake:
 
-The `bin/Release` directory will contain the package file (.nupkg), which can be [published to NuGet.org](https://learn.microsoft.com/nuget/nuget-org/publish-a-package).
+### 1. **GerarDadosContatosFake** (`ContatosFakeDataTool`)
+Gera uma lista com dados fictícios de contatos em português brasileiro.
+- **Parâmetro**: `numberOfRecords` (quantidade de registros a gerar)
+- **Retorno**: Lista de objetos `Contato` com Nome e Telefone
 
-## Developing locally
+### 2. **GerarDadosEmpresasFake** (`EmpresasFakeDataTool`)
+Gera uma lista com dados fictícios de empresas.
+- **Parâmetro**: `numberOfRecords` (quantidade de registros a gerar)
+- **Retorno**: Lista de objetos `Empresa`
 
-To test this MCP server from source code (locally) without using a built MCP server package, you can configure your IDE to run the project directly using `dotnet run`.
+### 3. **GerarDadosProdutosFake** (`ProdutosFakeDataTool`)
+Gera uma lista com dados fictícios de produtos.
+- **Parâmetro**: `numberOfRecords` (quantidade de registros a gerar)
+- **Retorno**: Lista de objetos `Produto`
+
+### 4. **GerarDadosMensagensFake** (`MensagensFakeDataTool`)
+Gera uma lista com dados fictícios de mensagens.
+- **Parâmetro**: `numberOfRecords` (quantidade de registros a gerar)
+- **Retorno**: Lista de objetos `Mensagem`
+
+## 📁 Estrutura do Projeto
+
+```
+FakeDataMcpServer/
+├── Program.cs                    # Configuração e inicialização do servidor
+├── FakeDataMcpServer.csproj      # Arquivo de projeto .NET
+├── README.md                     # Este arquivo
+│
+├── Models/                       # Modelos de dados
+│   ├── Contato.cs               # Modelo de contato
+│   ├── Empresa.cs               # Modelo de empresa
+│   ├── Produto.cs               # Modelo de produto
+│   ├── Mensagem.cs              # Modelo de mensagem
+│   └── Result.cs                # Modelo genérico para respostas
+│
+├── Tools/                        # Implementação das ferramentas MCP
+│   ├── ContatosFakeDataTool.cs   # Ferramenta de geração de contatos
+│   ├── EmpresasFakeDataTool.cs   # Ferramenta de geração de empresas
+│   ├── ProdutosFakeDataTool.cs   # Ferramenta de geração de produtos
+│   └── MensagensFakeDataTool.cs  # Ferramenta de geração de mensagens
+│
+└── Validators/                   # Validadores
+    └── NumberOfRecordsValidator.cs  # Validador de quantidade de registros
+```
+
+## 🚀 Desenvolvimento Local
+
+Para testar o servidor MCP diretamente a partir do código-fonte, configure sua IDE para executar o projeto utilizando `dotnet run`.
+
+### Configuração para VS Code
+
+Crie um arquivo `.vscode/mcp.json` com a seguinte configuração:
 
 ```json
 {
@@ -42,35 +82,56 @@ To test this MCP server from source code (locally) without using a built MCP ser
       "args": [
         "run",
         "--project",
-        "<PATH TO PROJECT DIRECTORY>"
+        "<CAMINHO_DO_DIRETÓRIO_DO_PROJETO>"
       ]
     }
   }
 }
 ```
 
-Refer to the VS Code or Visual Studio documentation for more information on configuring and using MCP servers:
+### Configuração para Visual Studio
 
-- [Use MCP servers in VS Code (Preview)](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
-- [Use MCP servers in Visual Studio (Preview)](https://learn.microsoft.com/visualstudio/ide/mcp-servers)
+Crie um arquivo `.mcp.json` na raiz da solução com a configuração acima.
 
-## Testing the MCP Server
+## 🧪 Testando o Servidor
 
-Once configured, you can ask Copilot Chat for a random number, for example, `Give me 3 random numbers`. It should prompt you to use the `get_random_number` tool on the `FakeDataMcpServer` MCP server and show you the results.
+Após configurar o servidor em sua IDE, você pode utilizar o Copilot Chat para solicitar a geração de dados fake. Exemplos:
 
-## Publishing to NuGet.org
+- `Gere 5 contatos fake`
+- `Crie 10 produtos fictícios`
+- `Gere dados de 20 empresas fake`
+- `Crie 15 mensagens fictícias`
 
-1. Run `dotnet pack -c Release` to create the NuGet package
-2. Publish to NuGet.org with `dotnet nuget push bin/Release/*.nupkg --api-key <your-api-key> --source https://api.nuget.org/v3/index.json`
+O Copilot irá reconhecer as ferramentas disponíveis e executá-las, retornando os dados gerados.
 
-## Using the MCP Server from NuGet.org
+## 📦 Publicação no NuGet.org
 
-Once the MCP server package is published to NuGet.org, you can configure it in your preferred IDE. Both VS Code and Visual Studio use the `dnx` command to download and install the MCP server package from NuGet.org.
+### Checklist antes de publicar
 
-- **VS Code**: Create a `<WORKSPACE DIRECTORY>/.vscode/mcp.json` file
-- **Visual Studio**: Create a `<SOLUTION DIRECTORY>\.mcp.json` file
+- ✅ Testar o servidor MCP localmente
+- ✅ Atualizar metadados do pacote no arquivo `.csproj`, especialmente o `<PackageId>`
+- ✅ Configurar os inputs do servidor em `.mcp/server.json`
+- ✅ Revisar a versão do pacote (`<Version>`)
 
-For both VS Code and Visual Studio, the configuration file uses the following server definition:
+### Passos para publicar
+
+1. Criar o pacote NuGet:
+   ```bash
+   dotnet pack -c Release
+   ```
+
+2. Publicar no NuGet.org:
+   ```bash
+   dotnet nuget push bin/Release/*.nupkg --api-key <sua-api-key> --source https://api.nuget.org/v3/index.json
+   ```
+
+O arquivo `.nupkg` será gerado no diretório `bin/Release`.
+
+## 🔌 Usando o Servidor a partir do NuGet.org
+
+Uma vez publicado, o servidor pode ser configurado em VS Code ou Visual Studio utilizando o comando `dnx`.
+
+### Configuração em VS Code
 
 ```json
 {
@@ -79,9 +140,9 @@ For both VS Code and Visual Studio, the configuration file uses the following se
       "type": "stdio",
       "command": "dnx",
       "args": [
-        "<your package ID here>",
+        "<seu-id-de-pacote>",
         "--version",
-        "<your package version here>",
+        "<versão-do-pacote>",
         "--yes"
       ]
     }
@@ -89,11 +150,24 @@ For both VS Code and Visual Studio, the configuration file uses the following se
 }
 ```
 
-## More information
+### Configuração em Visual Studio
 
-.NET MCP servers use the [ModelContextProtocol](https://www.nuget.org/packages/ModelContextProtocol) C# SDK. For more information about MCP:
+Crie um arquivo `.mcp.json` na raiz da solução com a mesma configuração acima.
 
-- [Official Documentation](https://modelcontextprotocol.io/)
-- [Protocol Specification](https://spec.modelcontextprotocol.io/)
-- [GitHub Organization](https://github.com/modelcontextprotocol)
-- [MCP C# SDK](https://modelcontextprotocol.github.io/csharp-sdk)
+## 📚 Referências
+
+- [Documentação Oficial MCP](https://modelcontextprotocol.io/)
+- [Especificação do Protocolo MCP](https://spec.modelcontextprotocol.io/)
+- [GitHub - Model Context Protocol](https://github.com/modelcontextprotocol)
+- [SDK C# para MCP](https://modelcontextprotocol.github.io/csharp-sdk)
+- [Biblioteca Bogus - Geração de Dados Fake](https://github.com/bchavez/Bogus)
+
+## 📋 Dependências Principais
+
+- **.NET 10**: Runtime e framework
+- **ModelContextProtocol**: SDK C# para implementação do protocolo MCP
+- **Bogus**: Biblioteca para geração de dados fictícios realistas
+
+## 🤝 Contribuições
+
+Sugestões de melhorias, novas ferramentas de geração de dados ou correções são bem-vindas!

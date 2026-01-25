@@ -6,8 +6,8 @@
   "packages": [
     {
       "registryType": "nuget",
-      "identifier": "FakeDataMcpServer-beta",
-      "version": "0.3.0-beta",
+      "identifier": "FakeDataMcpServer",
+      "version": "1.0.0",
       "transport": {
         "type": "stdio"
       },
