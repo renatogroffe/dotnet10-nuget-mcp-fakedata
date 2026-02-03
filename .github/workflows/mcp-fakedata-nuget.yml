@@ -19,11 +19,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v3.4.2
-        with:
-          dotnet-version: 9.0.304
-
+      - name: Exibir versao default do .NET
+        run: dotnet --version
+        
       - name: Exibir conteudo do README.md gerado para o package
         run: |
           cd ${{ env.PATH_PROJECT }}
